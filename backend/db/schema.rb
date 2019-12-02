@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_02_232026) do
+ActiveRecord::Schema.define(version: 2019_12_02_234518) do
+
+  create_table "games", force: :cascade do |t|
+    t.integer "player_id"
+    t.integer "phrase_id"
+    t.boolean "win"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "phrases", force: :cascade do |t|
     t.string "content"
