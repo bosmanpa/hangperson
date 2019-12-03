@@ -1,3 +1,6 @@
+let winCounter = 0
+let loseCounter = 6
+let phraseArray = []
 
 document.addEventListener('DOMContentLoaded', function() {
     const phraseContainer = document.getElementById('phrase')
@@ -12,13 +15,22 @@ document.addEventListener('DOMContentLoaded', function() {
 function addButtonListener() {
     const buttonDiv = document.querySelector('.alphabet')
     buttonDiv.addEventListener('click', function(event) {
+        let filteredArray = phraseArray.filter(letter => letter != ' ')
         if (event.target.className === 'btn btn-outline-primary') {
-            console.log(event.target) 
             const liNodeList = document.querySelectorAll(`li[data-id=${event.target.innerText}]`)
             const liArray = Array.from(liNodeList)
-            console.log(liArray)
-            liArray.forEach(li => li.innerText = li.dataset.id)
+            if (liArray.length > 0) {
+                liArray.forEach(li => li.innerText = li.dataset.id)
+                winCounter += liArray.length
+                if (winCounter === filteredArray.length) {
+                    console.log('WIN')
+                }
+            } else {
+                loseCounter --
+            }
+            
             event.target.disabled = true
+            // debugger
         }
 
     })
@@ -48,17 +60,8 @@ function makeButton(letter) {
 function renderPhrases(phrases) {
     const onePhrase = sample(phrases)
     const content = onePhrase.content
-    console.log(content)
-    let phraseArray = content.toUpperCase().split('')
+    phraseArray = content.toUpperCase().split('')
     console.log(phraseArray)
-
-    // const clues = phraseArray.map(function(letter) {
-    //     if (letter === ' ') {
-    //         return letter
-    //     } else {
-    //         return '_'
-    //     }
-    // })
 
     // const unorderedLetters = document.createElement('ul')
     phraseArray.forEach (clue => createClueLi(clue))
