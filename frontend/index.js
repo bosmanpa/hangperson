@@ -1,14 +1,48 @@
 let winCounter = 0
 let loseCounter = 6
 let phraseArray = []
+let currentPlayerId 
 
 document.addEventListener('DOMContentLoaded', main)
 
 function main() {
+    fetchPlayers()
+}
 
+function fetchPlayers() {
+    fetch('http://localhost:3000/players')
+    .then(resp => resp.json())
+    .then(players => addDropdowns(players))
+}
+
+function addDropdowns(players) {
+    players.forEach (player => addDropdown(player))
+    const selection = `<a id='new-player' class="dropdown-item" href="#">New Player</a>`
+    const dropdown = document.querySelector('.dropdown-menu')
+    dropdown.insertAdjacentHTML('beforeend', selection)
+    dropdown.addEventListener('click', function(event) {
+        console.log(event.target.innerText)
+        if (event.target.innerText === 'New Player') {
+            // create new player
+        } else if (event.target.className === 'dropdown-item') {
+            // log in player
+            const chosenPlayer = players.find(player => `player-${player.id}` === event.target.id)
+            currentPlayerId = chosenPlayer.id
+            renderGame()
+        }
+    })
+}
+
+function addDropdown(player) {
+    const dropdown = document.querySelector('.dropdown-menu')
+    const selection = `<a id='player-${player.id}' class="dropdown-item" href="#">${player.name}</a>`
+    dropdown.insertAdjacentHTML('beforeend', selection)
 }
 
 function renderGame() {
+    // welcome player
+    const playerDropdown = document.querySelector('.dropdown')
+    playerDropdown.style.display = 'none'
     const phraseContainer = document.getElementById('phrase')
     fetch('http://localhost:3000/phrases')
     .then(resp => resp.json())
