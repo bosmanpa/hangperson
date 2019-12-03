@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('http://localhost:3000/phrases')
     .then(resp => resp.json())
     .then(phrases => renderPhrases(phrases))
-    debugger
 })
 
 function renderPhrases(phrases) {
