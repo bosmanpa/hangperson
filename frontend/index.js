@@ -5,6 +5,10 @@ let phraseArray = []
 document.addEventListener('DOMContentLoaded', main)
 
 function main() {
+
+}
+
+function renderGame() {
     const phraseContainer = document.getElementById('phrase')
     fetch('http://localhost:3000/phrases')
     .then(resp => resp.json())
@@ -12,9 +16,15 @@ function main() {
     renderAlphabet()
     renderPicture()
     addButtonListener()
+    showGame()
 }
 
-function mainReload() {
+function showGame() {
+    const game = document.getElementById('game')
+    game.style.display = 'block'
+}
+
+function gameReload() {
     const phraseContainer = document.getElementById('phrase')
     fetch('http://localhost:3000/phrases')
     .then(resp => resp.json())
@@ -31,7 +41,7 @@ function newGame() {
     winCounter = 0
     loseCounter = 6
     phraseArray = [] 
-    mainReload()
+    gameReload()
 }
 
 function disableLetters() {

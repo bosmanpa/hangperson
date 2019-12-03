@@ -17,3 +17,7 @@
 #new-game-btn {
     display: none;
 }
+
+#game {
+    display: none;
+}
