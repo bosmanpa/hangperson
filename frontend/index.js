@@ -23,7 +23,6 @@ function mainReload() {
     renderPicture()
 }
 
-
 function newGame() {
     const myBody = document.querySelectorAll('.reset-my-body')
     myBody.forEach(node => node.innerText = '')
@@ -33,6 +32,11 @@ function newGame() {
     loseCounter = 6
     phraseArray = [] 
     mainReload()
+}
+
+function disableLetters() {
+    const buttonDiv = Array.from(document.querySelector('.alphabet').children)
+    buttonDiv.forEach (button => button.disabled = true)
 }
 
 function addButtonListener() {
@@ -45,28 +49,27 @@ function addButtonListener() {
             if (liArray.length > 0) {
                 liArray.forEach(li => li.innerText = li.dataset.id)
                 winCounter += liArray.length
-                console.log(winCounter)
                 if (winCounter === filteredArray.length) {
-                    console.log('WIN')
                     const winMsg = document.getElementById('winner')
                     winMsg.style.display = 'inline'
                     const newBtn = document.getElementById('new-game-btn')
                     newBtn.style.display = 'inline'
                     newBtn.addEventListener('click', newGame)
+                    disableLetters()
                 }
             } else {
                 loseCounter --
-                console.log(loseCounter)
+                let picture = document.querySelector('img')
+                picture.src = `pics/${loseCounter}.jpg`
                 if (loseCounter === 0) {
-                    console.log('YOU LOSE!')
                     const loseMsg = document.getElementById('loser')
                     loseMsg.style.display = 'inline'
                     const newBtn = document.getElementById('new-game-btn')
                     newBtn.style.display = 'inline'
                     newBtn.addEventListener('click', newGame)
+                    disableLetters()
                 } 
             }
-            
             event.target.disabled = true
         }
 
@@ -76,7 +79,7 @@ function addButtonListener() {
 function renderPicture() {
     const picDiv = document.querySelector('.hangman')
     let picture = document.createElement('img')
-    picture.src = 'pics/noose.jpg'
+    picture.src = `pics/${loseCounter}.jpg`
     picDiv.appendChild(picture)
 }
 
