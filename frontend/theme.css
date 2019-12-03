@@ -3,3 +3,17 @@
     padding: 2px;
     font-size: 50px;
 }
+
+#winner {
+    display: none;
+    color: green;
+}
+
+#loser {
+    display: none;
+    color: red;
+}
+
+#new-game-btn {
+    display: none;
+}

@@ -2,7 +2,9 @@ let winCounter = 0
 let loseCounter = 6
 let phraseArray = []
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', main)
+
+function main() {
     const phraseContainer = document.getElementById('phrase')
     fetch('http://localhost:3000/phrases')
     .then(resp => resp.json())
@@ -10,7 +12,28 @@ document.addEventListener('DOMContentLoaded', function() {
     renderAlphabet()
     renderPicture()
     addButtonListener()
-})
+}
+
+function mainReload() {
+    const phraseContainer = document.getElementById('phrase')
+    fetch('http://localhost:3000/phrases')
+    .then(resp => resp.json())
+    .then(phrases => renderPhrases(phrases))
+    renderAlphabet()
+    renderPicture()
+}
+
+
+function newGame() {
+    const myBody = document.querySelectorAll('.reset-my-body')
+    myBody.forEach(node => node.innerText = '')
+    const hideMe = document.querySelectorAll('.hide-my-body')
+    hideMe.forEach(node => node.style.display = 'none')
+    winCounter = 0
+    loseCounter = 6
+    phraseArray = [] 
+    mainReload()
+}
 
 function addButtonListener() {
     const buttonDiv = document.querySelector('.alphabet')
@@ -22,15 +45,29 @@ function addButtonListener() {
             if (liArray.length > 0) {
                 liArray.forEach(li => li.innerText = li.dataset.id)
                 winCounter += liArray.length
+                console.log(winCounter)
                 if (winCounter === filteredArray.length) {
                     console.log('WIN')
+                    const winMsg = document.getElementById('winner')
+                    winMsg.style.display = 'inline'
+                    const newBtn = document.getElementById('new-game-btn')
+                    newBtn.style.display = 'inline'
+                    newBtn.addEventListener('click', newGame)
                 }
             } else {
                 loseCounter --
+                console.log(loseCounter)
+                if (loseCounter === 0) {
+                    console.log('YOU LOSE!')
+                    const loseMsg = document.getElementById('loser')
+                    loseMsg.style.display = 'inline'
+                    const newBtn = document.getElementById('new-game-btn')
+                    newBtn.style.display = 'inline'
+                    newBtn.addEventListener('click', newGame)
+                } 
             }
             
             event.target.disabled = true
-            // debugger
         }
 
     })
@@ -62,12 +99,7 @@ function renderPhrases(phrases) {
     const content = onePhrase.content
     phraseArray = content.toUpperCase().split('')
     console.log(phraseArray)
-
-    // const unorderedLetters = document.createElement('ul')
     phraseArray.forEach (clue => createClueLi(clue))
-    // debugger
-    // phrase.innerHTML = 
-    // phraseContainer.appendChild(phrase)
 }
 
 function createClueLi(clue) {

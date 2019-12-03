@@ -14,14 +14,23 @@
   <body>
     <h1 class="mx-auto" style="width: 300px;">Hangperson</h1>
 
-    <div class="mx-auto hangman" style="width: 300px">
+    <div class="mx-auto hangman reset-my-body" style="width: 300px">
     </div>
 
     <div class="mx-auto" style="width: 600px">
-        <ul id='phrase'></ul>
+        <ul id='phrase' class='reset-my-body'></ul>
     </div>
 
-    <div class="alphabet mx-auto" style='width: 500px'>
+    <div class="alphabet reset-my-body mx-auto" style='width: 500px'>
+    </div>
+
+    <div class="results mx-auto" style="width: 400px">
+        <h2 id='winner' class='hide-my-body'>YOU WIN!</h2>
+        <h2 id='loser' class='hide-my-body'>YOU LOSE!</h2>
+    </div>
+
+    <div class='new-game mx-auto' style="width: 200px">
+        <button id="new-game-btn" class="hide-my-body">New Game</button>
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
