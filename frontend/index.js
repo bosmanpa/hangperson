@@ -68,12 +68,23 @@ function addButtonListener() {
                     newBtn.style.display = 'inline'
                     newBtn.addEventListener('click', newGame)
                     disableLetters()
+                    const clueContainer = document.getElementById('phrase')
+                    // console.log(clueContainer.children)
+                    const clueArray = Array.from(clueContainer.children)
+                    clueArray.forEach (clue => checkClue(clue))
                 } 
             }
             event.target.disabled = true
         }
 
     })
+}
+
+function checkClue(clue) {
+    if (clue.innerText === '_') {
+        clue.innerText = clue.dataset.id
+        clue.style.color = 'red'
+    }
 }
 
 function renderPicture() {
