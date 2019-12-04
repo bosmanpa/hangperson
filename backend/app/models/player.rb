@@ -1,4 +1,4 @@
 class Player < ApplicationRecord
     has_many :phrases
-    has_many :games, dependent: :destroy
+    has_many :games
 end
