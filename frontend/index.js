@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', main)
 function main() {
     const hideUs = document.querySelectorAll('.reset-my-body')
     const hideArray = Array.from(hideUs)
-    hideArray.forEach (element => element.style.display = 'none')
+
+
+    // hideArray.forEach (element => element.style.display = 'none')
     const playerDropdown = document.querySelector('.dropdown')
     playerDropdown.style.display = 'block'
     fetchPlayers()
@@ -113,7 +115,9 @@ function addDropdown(player) {
 function renderGame() {
     const hideUs = document.querySelectorAll('.reset-my-body')
     const hideArray = Array.from(hideUs)
-    hideArray.forEach (element => element.style.display = 'block')
+
+
+    // hideArray.forEach (element => element.style.display = 'block')
     renderStats(currentPlayerName, gameWins, gameLosses)
     deleteButton()
     const playerDropdown = document.querySelector('.dropdown')
