@@ -6,6 +6,7 @@ let currentPlayerName
 let currentPhraseId
 let gameWins
 let gameLosses
+let playerGames
 
 document.addEventListener('DOMContentLoaded', main)
 
@@ -27,14 +28,11 @@ function addDropdowns(players) {
     const dropdown = document.querySelector('.dropdown-menu')
     dropdown.insertAdjacentHTML('beforeend', selection)
     dropdown.addEventListener('click', function(event) {
-        console.log(event.target.innerText)
         if (event.target.innerText === 'New Player') {
             // create new player
             const form = document.getElementById('player-form')
             form.style.display = 'block'
-            console.log(event.target)
         } else if (event.target.className === 'dropdown-item') {
-            console.log(event.target)
             const chosenPlayer = players.find(player => `player-${player.id}` === event.target.id)
             currentPlayerId = chosenPlayer.id
             currentPlayerName = chosenPlayer.name
@@ -50,7 +48,7 @@ function fetchGames(playerId) {
 }
 
 function filterGames(games, playerId) {
-    let playerGames = games.filter(game => game.player_id === playerId)
+    playerGames = games.filter(game => game.player_id === playerId)
     gameWins = playerGames.filter(game => game.win === true).length
     gameLosses = playerGames.filter(game => game.win === false).length
     renderGame()
@@ -129,12 +127,7 @@ function deleteButton() {
 function deletePlayer() {
     fetch(`http://localhost:3000/players/${currentPlayerId}`, { method: 'DELETE'})
     .then(resp => resp.json())
-    .then(function(message) {
-        // const statsDiv = document.getElementById('player-stats')
-        // statsDiv.innerHTML = ''
-        // main()
-        window.location.reload()
-    })
+    .then(window.location.reload())
 }
 
 function showGame() {
@@ -149,6 +142,7 @@ function gameReload() {
     .then(phrases => renderPhrases(phrases))
     renderAlphabet()
     renderPicture()
+    deleteButton()
 }
 
 function newGame() {
@@ -187,6 +181,7 @@ function addButtonListener() {
                     renderStats(currentPlayerName, gameWins, gameLosses)
                     newBtn.addEventListener('click', newGame)
                     disableLetters()
+                    deleteButton()
                     saveGame(true)
                 }
                 // Lose Situation
@@ -207,6 +202,7 @@ function addButtonListener() {
                     // console.log(clueContainer.children)
                     const clueArray = Array.from(clueContainer.children)
                     clueArray.forEach (clue => checkClue(clue))
+                    deleteButton()
                     saveGame(false)
                 } 
             }
