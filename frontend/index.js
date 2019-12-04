@@ -62,6 +62,7 @@ function renderStats(playerName, winNumber, lossNumber) {
     <h3>${playerName}</h3>
     <h4>Wins: ${winNumber}</h4>
     <h4>Losses: ${lossNumber}</h4>
+    <button id="delete-button">Delete Player</button>
     `
     statsDiv.innerHTML = winLossHtml
 }
@@ -107,6 +108,7 @@ function addDropdown(player) {
 function renderGame() {
     // welcome player
     renderStats(currentPlayerName, gameWins, gameLosses)
+    deleteButton()
     const playerDropdown = document.querySelector('.dropdown')
     playerDropdown.style.display = 'none'
     const phraseContainer = document.getElementById('phrase')
@@ -117,6 +119,21 @@ function renderGame() {
     renderPicture()
     addButtonListener()
     showGame()
+}
+
+function deleteButton() {
+    const deleteBtn = document.getElementById('delete-button')
+    deleteBtn.addEventListener('click', deletePlayer)
+}
+
+function deletePlayer() {
+    fetch(`http://localhost:3000/players/${currentPlayerId}`, { method: 'DELETE'})
+    .then(resp => resp.json())
+    .then(function(message) {
+        const statsDiv = document.getElementById('player-stats')
+        statsDiv.innerHTML = ''
+        main()
+    })
 }
 
 function showGame() {
