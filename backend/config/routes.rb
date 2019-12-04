@@ -5,4 +5,6 @@ Rails.application.routes.draw do
 
   resources :players, only: [:index, :show, :create, :destroy]
 
+  get '/players/:id/delete_games', to: 'players#delete_games'
+
 end

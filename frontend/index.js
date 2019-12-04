@@ -61,8 +61,12 @@ function renderStats(playerName, winNumber, lossNumber) {
     <h4>Wins: ${winNumber}</h4>
     <h4>Losses: ${lossNumber}</h4>
     <button id="delete-button">Delete Player</button>
+    <br><br>
+    <button id="reset-button">Reset Games</button>
     `
     statsDiv.innerHTML = winLossHtml
+    deleteButton()
+    resetButton()
 }
 
 function formListener() {
@@ -106,7 +110,6 @@ function addDropdown(player) {
 function renderGame() {
     // welcome player
     renderStats(currentPlayerName, gameWins, gameLosses)
-    deleteButton()
     const playerDropdown = document.querySelector('.dropdown')
     playerDropdown.style.display = 'none'
     const phraseContainer = document.getElementById('phrase')
@@ -117,6 +120,22 @@ function renderGame() {
     renderPicture()
     addButtonListener()
     showGame()
+}
+
+function resetButton() {
+    const resetBtn = document.getElementById('reset-button')
+    resetBtn.addEventListener('click', resetGames)
+}
+
+function resetGames() {
+    fetch(`http://localhost:3000/players/${currentPlayerId}/delete_games`)
+    .then(resp => resp.json())
+    .then(function() {
+        gameWins = 0
+        gameLosses = 0
+        renderStats(currentPlayerName, gameWins, gameLosses)
+        deleteButton()
+    })
 }
 
 function deleteButton() {
@@ -143,6 +162,7 @@ function gameReload() {
     renderAlphabet()
     renderPicture()
     deleteButton()
+    resetButton()
 }
 
 function newGame() {
@@ -181,7 +201,6 @@ function addButtonListener() {
                     renderStats(currentPlayerName, gameWins, gameLosses)
                     newBtn.addEventListener('click', newGame)
                     disableLetters()
-                    deleteButton()
                     saveGame(true)
                 }
                 // Lose Situation
@@ -202,7 +221,6 @@ function addButtonListener() {
                     // console.log(clueContainer.children)
                     const clueArray = Array.from(clueContainer.children)
                     clueArray.forEach (clue => checkClue(clue))
-                    deleteButton()
                     saveGame(false)
                 } 
             }
@@ -261,6 +279,7 @@ function makeButton(letter) {
     const letterBtn = document.createElement('button')
     letterBtn.innerHTML = letter
     letterBtn.className = 'btn btn-outline-primary'
+    letterBtn.style.width = "38px"
     buttonDiv.appendChild(letterBtn)
 }
 
