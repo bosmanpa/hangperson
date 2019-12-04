@@ -2,11 +2,17 @@ let winCounter = 0
 let loseCounter = 6
 let phraseArray = []
 let currentPlayerId 
+let currentPlayerName
+let currentPhraseId
+let gameWins
+let gameLosses
 
 document.addEventListener('DOMContentLoaded', main)
 
 function main() {
     fetchPlayers()
+    formListener()
+
 }
 
 function fetchPlayers() {
@@ -24,13 +30,72 @@ function addDropdowns(players) {
         console.log(event.target.innerText)
         if (event.target.innerText === 'New Player') {
             // create new player
+            const form = document.getElementById('player-form')
+            form.style.display = 'block'
+            console.log(event.target)
         } else if (event.target.className === 'dropdown-item') {
-            // log in player
+            console.log(event.target)
             const chosenPlayer = players.find(player => `player-${player.id}` === event.target.id)
             currentPlayerId = chosenPlayer.id
-            renderGame()
+            currentPlayerName = chosenPlayer.name
+            fetchGames(currentPlayerId)
         }
     })
+}
+
+function fetchGames(playerId) {
+    fetch('http://localhost:3000/games')
+    .then(resp => resp.json())
+    .then(games => filterGames(games, playerId))
+}
+
+function filterGames(games, playerId) {
+    let playerGames = games.filter(game => game.player_id === playerId)
+    gameWins = playerGames.filter(game => game.win === true).length
+    gameLosses = playerGames.filter(game => game.win === false).length
+    renderGame()
+}
+
+function renderStats(playerName, winNumber, lossNumber) {
+    const statsDiv = document.getElementById('player-stats')
+    const winLossHtml = `
+    <h3>${playerName}</h3>
+    <h4>Wins: ${winNumber}</h4>
+    <h4>Losses: ${lossNumber}</h4>
+    `
+    statsDiv.innerHTML = winLossHtml
+}
+
+function formListener() {
+    const form = document.getElementById('player-form')
+    form.addEventListener('submit', function(event) {
+        event.preventDefault()
+        createPlayer(event.target.children[0].value)
+        form.style.display = 'none'
+    })
+}
+
+function createPlayer(name) {
+    const postObj = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({name: name})
+    }
+
+    fetch('http://localhost:3000/players', postObj)
+    .then(resp => resp.json())
+    .then(player => logInNewPlayer(player))
+}
+
+function logInNewPlayer(player) {
+    currentPlayerId = player.id
+    currentPlayerName = player.name
+    gameWins = 0
+    gameLosses = 0
+    renderGame()
 }
 
 function addDropdown(player) {
@@ -41,6 +106,7 @@ function addDropdown(player) {
 
 function renderGame() {
     // welcome player
+    renderStats(currentPlayerName, gameWins, gameLosses)
     const playerDropdown = document.querySelector('.dropdown')
     playerDropdown.style.display = 'none'
     const phraseContainer = document.getElementById('phrase')
@@ -93,14 +159,19 @@ function addButtonListener() {
             if (liArray.length > 0) {
                 liArray.forEach(li => li.innerText = li.dataset.id)
                 winCounter += liArray.length
+                // Win Situation
                 if (winCounter === filteredArray.length) {
                     const winMsg = document.getElementById('winner')
                     winMsg.style.display = 'inline'
                     const newBtn = document.getElementById('new-game-btn')
                     newBtn.style.display = 'inline'
+                    gameWins ++
+                    renderStats(currentPlayerName, gameWins, gameLosses)
                     newBtn.addEventListener('click', newGame)
                     disableLetters()
+                    saveGame(true)
                 }
+                // Lose Situation
             } else {
                 loseCounter --
                 let picture = document.querySelector('img')
@@ -110,18 +181,45 @@ function addButtonListener() {
                     loseMsg.style.display = 'inline'
                     const newBtn = document.getElementById('new-game-btn')
                     newBtn.style.display = 'inline'
+                    gameLosses ++
+                    renderStats(currentPlayerName, gameWins, gameLosses)
                     newBtn.addEventListener('click', newGame)
                     disableLetters()
                     const clueContainer = document.getElementById('phrase')
                     // console.log(clueContainer.children)
                     const clueArray = Array.from(clueContainer.children)
                     clueArray.forEach (clue => checkClue(clue))
+                    saveGame(false)
                 } 
             }
             event.target.disabled = true
         }
 
     })
+}
+
+function saveGame(winOrLose) {
+    const fetchBody = {
+        player_id: currentPlayerId,
+        phrase_id: currentPhraseId,
+        win: winOrLose
+    }
+
+    const postObj = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(fetchBody)
+    }
+
+    fetch('http://localhost:3000/games', postObj)
+    .then(resp => resp.json())
+    .then(game => console.log(game))
+    // render wins and losses for player
+    .catch(error => console.log(error))
+    
 }
 
 function checkClue(clue) {
@@ -154,6 +252,7 @@ function makeButton(letter) {
 
 function renderPhrases(phrases) {
     const onePhrase = sample(phrases)
+    currentPhraseId = onePhrase.id
     const content = onePhrase.content
     phraseArray = content.toUpperCase().split('')
     console.log(phraseArray)
