@@ -130,9 +130,10 @@ function deletePlayer() {
     fetch(`http://localhost:3000/players/${currentPlayerId}`, { method: 'DELETE'})
     .then(resp => resp.json())
     .then(function(message) {
-        const statsDiv = document.getElementById('player-stats')
-        statsDiv.innerHTML = ''
-        main()
+        // const statsDiv = document.getElementById('player-stats')
+        // statsDiv.innerHTML = ''
+        // main()
+        window.location.reload()
     })
 }
 
