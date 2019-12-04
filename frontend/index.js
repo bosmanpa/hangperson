@@ -92,6 +92,9 @@ function createPlayer(name) {
 
 function logInNewPlayer(player) {
     currentPlayerId = player.id
+    currentPlayerName = player.name
+    gameWins = 0
+    gameLosses = 0
     renderGame()
 }
 
@@ -103,7 +106,6 @@ function addDropdown(player) {
 
 function renderGame() {
     // welcome player
-    debugger
     renderStats(currentPlayerName, gameWins, gameLosses)
     const playerDropdown = document.querySelector('.dropdown')
     playerDropdown.style.display = 'none'
@@ -163,6 +165,8 @@ function addButtonListener() {
                     winMsg.style.display = 'inline'
                     const newBtn = document.getElementById('new-game-btn')
                     newBtn.style.display = 'inline'
+                    gameWins ++
+                    renderStats(currentPlayerName, gameWins, gameLosses)
                     newBtn.addEventListener('click', newGame)
                     disableLetters()
                     saveGame(true)
@@ -177,6 +181,8 @@ function addButtonListener() {
                     loseMsg.style.display = 'inline'
                     const newBtn = document.getElementById('new-game-btn')
                     newBtn.style.display = 'inline'
+                    gameLosses ++
+                    renderStats(currentPlayerName, gameWins, gameLosses)
                     newBtn.addEventListener('click', newGame)
                     disableLetters()
                     const clueContainer = document.getElementById('phrase')
