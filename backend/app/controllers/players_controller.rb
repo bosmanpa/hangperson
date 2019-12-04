@@ -15,6 +15,12 @@ class PlayersController < ApplicationController
         render json: player
     end
 
+    def destroy
+        player = Player.find(params[:id])
+        player.delete()
+        render json: { message: 'deleted player' }
+    end
+
     private
     def player_params
         params.require(:player).permit(:name)
