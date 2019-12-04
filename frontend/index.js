@@ -2,7 +2,10 @@ let winCounter = 0
 let loseCounter = 6
 let phraseArray = []
 let currentPlayerId 
+let currentPlayerName
 let currentPhraseId
+let gameWins
+let gameLosses
 
 document.addEventListener('DOMContentLoaded', main)
 
@@ -34,9 +37,33 @@ function addDropdowns(players) {
             console.log(event.target)
             const chosenPlayer = players.find(player => `player-${player.id}` === event.target.id)
             currentPlayerId = chosenPlayer.id
-            renderGame()
+            currentPlayerName = chosenPlayer.name
+            fetchGames(currentPlayerId)
         }
     })
+}
+
+function fetchGames(playerId) {
+    fetch('http://localhost:3000/games')
+    .then(resp => resp.json())
+    .then(games => filterGames(games, playerId))
+}
+
+function filterGames(games, playerId) {
+    let playerGames = games.filter(game => game.player_id === playerId)
+    gameWins = playerGames.filter(game => game.win === true).length
+    gameLosses = playerGames.filter(game => game.win === false).length
+    renderGame()
+}
+
+function renderStats(playerName, winNumber, lossNumber) {
+    const statsDiv = document.getElementById('player-stats')
+    const winLossHtml = `
+    <h3>${playerName}</h3>
+    <h4>Wins: ${winNumber}</h4>
+    <h4>Losses: ${lossNumber}</h4>
+    `
+    statsDiv.innerHTML = winLossHtml
 }
 
 function formListener() {
@@ -76,6 +103,8 @@ function addDropdown(player) {
 
 function renderGame() {
     // welcome player
+    debugger
+    renderStats(currentPlayerName, gameWins, gameLosses)
     const playerDropdown = document.querySelector('.dropdown')
     playerDropdown.style.display = 'none'
     const phraseContainer = document.getElementById('phrase')
