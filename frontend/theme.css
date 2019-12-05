@@ -3,7 +3,7 @@
     padding: 2px;
     font-size: 40px;
     position: relative;
-    bottom: 500px;
+    bottom: 30px;
 }
 
 img {
@@ -56,4 +56,21 @@ img {
 #new-game-btn{
     position: relative;
     bottom:450px;
+}
+
+#phrase-category {
+    position: relative;
+    bottom:450px;
+}
+#title {
+    font-family: 'Chalkduster', 'fantasy';
+    font-size: 50px;
+    margin: 10px;
+    margin-bottom: 20px;
+}
+#new-game-btn{
+    background-color: rgba(81, 197, 243, 0.966);
+}
+#delete-button{
+    background-color: rgba(81, 197, 243, 0.966);
 }
