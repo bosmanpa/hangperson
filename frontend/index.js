@@ -7,6 +7,7 @@ let currentPhraseId
 let gameWins
 let gameLosses
 let playerGames
+const clueContainer = document.getElementById('phrase')
 
 document.addEventListener('DOMContentLoaded', main)
 
@@ -67,7 +68,7 @@ function renderStats(playerName, winNumber, lossNumber) {
     <h4>Losses: ${lossNumber}</h4>
     <button id="delete-button">Delete Player</button>
     <br><br>
-    <button id="reset-button">Reset Games</button>
+    <button id="reset-button">Reset Stats</button>
     <br><br>
     <button id="change-player">Change Playa</button>
     `
@@ -172,7 +173,7 @@ function deleteButton() {
 function deletePlayer() {
     fetch(`http://localhost:3000/players/${currentPlayerId}`, { method: 'DELETE'})
     .then(resp => resp.json())
-    .then(window.location.reload())
+    .then(() => window.location.reload())
 }
 
 function showGame() {
@@ -251,16 +252,12 @@ function correctLetter(liArray) {
 function loseCondition() {
     const loseMsg = document.getElementById('loser')
     loseMsg.style.display = 'inline'
-    revealNewButton()
     gameLosses ++
-    renderStats(currentPlayerName, gameWins, gameLosses)
-    disableLetters()
+    finishAndSave(false)
     missedLetters()
-    saveGame(false)
 }
 
 function missedLetters() {
-    const clueContainer = document.getElementById('phrase')
     const clueArray = Array.from(clueContainer.children)
     clueArray.forEach (clue => checkClue(clue))
 }
@@ -268,12 +265,16 @@ function missedLetters() {
 function winCondition() {
     const winMsg = document.getElementById('winner')
     winMsg.style.display = 'inline'
-    revealNewButton()
     gameWins ++
+    finishAndSave(true)
+    celebration()
+}
+
+function finishAndSave(trueFalse) {
+    revealNewButton()
     renderStats(currentPlayerName, gameWins, gameLosses)
     disableLetters()
-    celebration()
-    saveGame(true)
+    saveGame(trueFalse)
 }
 
 function revealNewButton() {
@@ -301,7 +302,6 @@ function saveGame(winOrLose) {
     fetch('http://localhost:3000/games', postObj)
     .then(resp => resp.json())
     .then(game => console.log(game))
-    // render wins and losses for player
     .catch(error => console.log(error))
     
 }
@@ -340,28 +340,20 @@ function makeButton(letter) {
 function renderPhrases(phrases) {
     const onePhrase = sample(phrases)
     currentPhraseId = onePhrase.id
-    const content = onePhrase.content
-    const cleanContent = content.normalize('NFD').replace(/[^a-zA-Z ]/g, "")
-    phraseArray = cleanContent.toUpperCase().split('')
+    phraseArray = onePhrase.content.normalize('NFD').replace(/[^a-zA-Z ]/g, "").toUpperCase().split('')
     console.log(phraseArray)
     phraseArray.forEach (clue => createClueLi(clue))
     renderCategory(onePhrase)
 }
 
 function renderCategory(onePhrase) {
-    const clueContainer = document.getElementById('phrase')
     const categoryHtml = `<h4>Hint: ${onePhrase.category}</h4>`
     clueContainer.insertAdjacentHTML('beforeend', categoryHtml)
 }
 
 function createClueLi(clue) {
-    const clueContainer = document.getElementById('phrase')
     const li = document.createElement('li')
-    if (clue === ' ') {
-        li.innerText = clue
-    } else {
-        li.innerText = '_'
-    }
+    clue === ' ' ? li.innerText = clue : li.innerText = '_'
     li.dataset.id = clue
     li.className = 'clue'
     clueContainer.appendChild(li)
@@ -370,6 +362,7 @@ function createClueLi(clue) {
 function sample(array) {
     return array[Math.floor ( Math.random() * array.length )]
 }
+
 // fireworks
 const brd = document.createElement("DIV");
 document.body.insertBefore(brd, document.getElementById("game"));
