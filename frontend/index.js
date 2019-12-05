@@ -133,7 +133,6 @@ function addDropdown(player) {
 }
 
 function renderGame() {
-    // welcome player
     renderStats(currentPlayerName, gameWins, gameLosses)
     const playerDropdown = document.querySelector('.dropdown')
     playerDropdown.style.display = 'none'
@@ -148,7 +147,10 @@ function renderGame() {
 
 function resetButton() {
     const resetBtn = document.getElementById('reset-button')
-    resetBtn.addEventListener('click', resetGames)
+    resetBtn.addEventListener('click', function(){
+        const result = confirm("Are you sure you want to reset your stats?")
+        if (result == true) {resetGames()}
+    })
 }
 
 function resetGames() {
@@ -163,7 +165,10 @@ function resetGames() {
 
 function deleteButton() {
     const deleteBtn = document.getElementById('delete-button')
-    deleteBtn.addEventListener('click', deletePlayer)
+    deleteBtn.addEventListener('click', function(){
+        const result = confirm("Are you sure you want to delete this player?")
+        if (result == true) {deletePlayer()}
+    })
 }
 
 function deletePlayer() {
