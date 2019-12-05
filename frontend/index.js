@@ -133,6 +133,10 @@ function renderGame() {
     fetch('http://localhost:3000/phrases')
     .then(resp => resp.json())
     .then(phrases => renderPhrases(phrases))
+    gamePlay()
+}
+
+function gamePlay() {
     renderAlphabet()
     renderPicture()
     addButtonListener()
@@ -185,14 +189,18 @@ function gameReload() {
 }
 
 function newGame() {
-    const myBody = document.querySelectorAll('.reset-my-body')
-    myBody.forEach(node => node.innerText = '')
-    const hideMe = document.querySelectorAll('.hide-my-body')
-    hideMe.forEach(node => node.style.display = 'none')
+    hideOldGame()
     winCounter = 0
     loseCounter = 6
     phraseArray = [] 
     gameReload()
+}
+
+function hideOldGame() {
+    const myBody = document.querySelectorAll('.reset-my-body')
+    myBody.forEach(node => node.innerText = '')
+    const hideMe = document.querySelectorAll('.hide-my-body')
+    hideMe.forEach(node => node.style.display = 'none')
 }
 
 function disableLetters() {
