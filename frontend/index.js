@@ -213,8 +213,11 @@ function disableLetters() {
 
 function addButtonListener() {
     const buttonDiv = document.querySelector('.alphabet')
-    buttonDiv.addEventListener('click', function(event) {
-        let filteredArray = phraseArray.filter(letter => letter != ' ')
+    buttonDiv.addEventListener('click', event => letterSelection(event))
+}
+
+function letterSelection(event) {
+    let filteredArray = phraseArray.filter(letter => letter != ' ')
         if (event.target.className === 'btn btn-outline-success') {
             event.target.style.background = 'black'
             const liNodeList = document.querySelectorAll(`li[data-id=${event.target.innerText}]`)
@@ -255,10 +258,8 @@ function addButtonListener() {
                     saveGame(false)
                 } 
             }
-            event.target.disabled = true
+        event.target.disabled = true
         }
-
-    })
 }
 
 function saveGame(winOrLose) {
