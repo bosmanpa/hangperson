@@ -217,49 +217,69 @@ function addButtonListener() {
 }
 
 function letterSelection(event) {
-    let filteredArray = phraseArray.filter(letter => letter != ' ')
-        if (event.target.className === 'btn btn-outline-success') {
-            event.target.style.background = 'black'
-            const liNodeList = document.querySelectorAll(`li[data-id=${event.target.innerText}]`)
-            const liArray = Array.from(liNodeList)
-            if (liArray.length > 0) {
-                liArray.forEach(li => li.innerText = li.dataset.id)
-                winCounter += liArray.length
-                // Win Situation
-                if (winCounter === filteredArray.length) {
-                    const winMsg = document.getElementById('winner')
-                    winMsg.style.display = 'inline'
-                    const newBtn = document.getElementById('new-game-btn')
-                    newBtn.style.display = 'inline'
-                    gameWins ++
-                    renderStats(currentPlayerName, gameWins, gameLosses)
-                    newBtn.addEventListener('click', newGame)
-                    disableLetters()
-                    celebration()
-                    saveGame(true)
-                }
-                // Lose Situation
-            } else {
-                loseCounter --
-                let picture = document.querySelector('img')
-                picture.src = `pics/${loseCounter}.png`
-                if (loseCounter === 0) {
-                    const loseMsg = document.getElementById('loser')
-                    loseMsg.style.display = 'inline'
-                    const newBtn = document.getElementById('new-game-btn')
-                    newBtn.style.display = 'inline'
-                    gameLosses ++
-                    renderStats(currentPlayerName, gameWins, gameLosses)
-                    newBtn.addEventListener('click', newGame)
-                    disableLetters()
-                    const clueContainer = document.getElementById('phrase')
-                    const clueArray = Array.from(clueContainer.children)
-                    clueArray.forEach (clue => checkClue(clue))
-                    saveGame(false)
-                } 
-            }
-        event.target.disabled = true
+    if (event.target.className === 'btn btn-outline-success') {
+        event.target.style.background = 'black'
+        const liNodeList = document.querySelectorAll(`li[data-id=${event.target.innerText}]`)
+        const liArray = Array.from(liNodeList)
+        if (liArray.length > 0) {
+            correctLetter(liArray)
+        } else {
+            wrongLetter()
         }
+    event.target.disabled = true
+    }
+}
+
+function wrongLetter() {
+    loseCounter --
+    let picture = document.querySelector('img')
+    picture.src = `pics/${loseCounter}.png`
+    if (loseCounter === 0) {
+        loseCondition()
+    } 
+}
+
+function correctLetter(liArray) {
+    let filteredArray = phraseArray.filter(letter => letter != ' ')
+    liArray.forEach(li => li.innerText = li.dataset.id)
+    winCounter += liArray.length
+    if (winCounter === filteredArray.length) {
+        winCondition()
+    }
+}
+
+function loseCondition() {
+    const loseMsg = document.getElementById('loser')
+    loseMsg.style.display = 'inline'
+    revealNewButton()
+    gameLosses ++
+    renderStats(currentPlayerName, gameWins, gameLosses)
+    disableLetters()
+    missedLetters()
+    saveGame(false)
+}
+
+function missedLetters() {
+    const clueContainer = document.getElementById('phrase')
+    const clueArray = Array.from(clueContainer.children)
+    clueArray.forEach (clue => checkClue(clue))
+}
+
+function winCondition() {
+    const winMsg = document.getElementById('winner')
+    winMsg.style.display = 'inline'
+    revealNewButton()
+    gameWins ++
+    renderStats(currentPlayerName, gameWins, gameLosses)
+    disableLetters()
+    celebration()
+    saveGame(true)
+}
+
+function revealNewButton() {
+    const newBtn = document.getElementById('new-game-btn')
+    newBtn.style.display = 'inline'
+    newBtn.addEventListener('click', newGame)
 }
 
 function saveGame(winOrLose) {
