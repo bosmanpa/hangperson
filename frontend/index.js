@@ -178,14 +178,18 @@ function newGame() {
 
 function disableLetters() {
     const buttonDiv = Array.from(document.querySelector('.alphabet').children)
-    buttonDiv.forEach (button => button.disabled = true)
+    buttonDiv.forEach (button => {
+        button.disabled = true
+        button.style.background = 'black'   
+    })
 }
 
 function addButtonListener() {
     const buttonDiv = document.querySelector('.alphabet')
     buttonDiv.addEventListener('click', function(event) {
         let filteredArray = phraseArray.filter(letter => letter != ' ')
-        if (event.target.className === 'btn btn-outline-primary') {
+        if (event.target.className === 'btn btn-outline-success') {
+            event.target.style.background = 'black'
             const liNodeList = document.querySelectorAll(`li[data-id=${event.target.innerText}]`)
             const liArray = Array.from(liNodeList)
             if (liArray.length > 0) {
@@ -219,7 +223,6 @@ function addButtonListener() {
                     newBtn.addEventListener('click', newGame)
                     disableLetters()
                     const clueContainer = document.getElementById('phrase')
-                    // console.log(clueContainer.children)
                     const clueArray = Array.from(clueContainer.children)
                     clueArray.forEach (clue => checkClue(clue))
                     saveGame(false)
@@ -266,7 +269,8 @@ function renderPicture() {
     const picDiv = document.querySelector('.hangman')
     let picture = document.createElement('img')
     picture.src = `pics/${loseCounter}.png`
-    picture.className = "border border-secondary"
+    picture.className = "border-0 border-secondary"
+    picture.id = "hangman-pic"
     picDiv.appendChild(picture)
 }
 
@@ -280,7 +284,7 @@ function makeButton(letter) {
     const buttonDiv = document.querySelector('.alphabet')
     const letterBtn = document.createElement('button')
     letterBtn.innerHTML = letter
-    letterBtn.className = 'btn btn-outline-primary'
+    letterBtn.className = 'btn btn-outline-success'
     letterBtn.style.width = "38px"
     buttonDiv.appendChild(letterBtn)
 }

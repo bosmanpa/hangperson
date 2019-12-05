@@ -7,11 +7,9 @@
 }
 
 img {
-
     height: 600px;
     position: relative;
     left:430px;
-    
 }
 
 #winner {
@@ -64,6 +62,7 @@ img {
     position: relative;
     bottom:450px;
 }
+
 @keyframes 			firework-animation {
     0% {background-color : #ff8426;}
     25% {background-color : #fffc84;}
@@ -128,4 +127,35 @@ img {
     animation-timing-function : linear;
     animation-duration : 0.5s;
     animation-iteration-count : infinite;
+}
+
+#title {
+    font-family: 'Chalkduster', 'fantasy';
+    font-size: 50px;
+    margin: 10px;
+    margin-bottom: 20px;
+}
+#new-game-btn{
+    border-color: rgba(35, 141, 41, 0.966);
+    padding: 7px;
+    border-radius:5px;
+    color:rgba(35, 141, 41, 0.966);
+}
+#delete-button{
+    border-color: rgba(35, 141, 41, 0.966);
+    padding: 7px;
+    border-radius:5px;
+    color:rgba(35, 141, 41, 0.966);
+}
+#reset-button{
+    border-color: rgba(35, 141, 41, 0.966);
+    padding: 7px;
+    border-radius:5px;
+    color:rgba(35, 141, 41, 0.966);
+}
+
+button:disabled,
+button[disabled]{
+  background-color: black;
+  color: black;
 }
