@@ -3,7 +3,7 @@
     padding: 2px;
     font-size: 40px;
     position: relative;
-    bottom: 500px;
+    bottom: 30px;
 }
 
 img {
@@ -56,6 +56,11 @@ img {
     margin: 20px;
 }
 #new-game-btn{
+    position: relative;
+    bottom:450px;
+}
+
+#phrase-category {
     position: relative;
     bottom:450px;
 }
