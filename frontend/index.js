@@ -268,7 +268,8 @@ function renderPicture() {
     const picDiv = document.querySelector('.hangman')
     let picture = document.createElement('img')
     picture.src = `pics/${loseCounter}.png`
-    picture.className = "border border-secondary"
+    picture.className = "border-0 border-secondary"
+    picture.id = "hangman-pic"
     picDiv.appendChild(picture)
 }
 
