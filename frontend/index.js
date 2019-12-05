@@ -287,7 +287,8 @@ function renderPhrases(phrases) {
     const onePhrase = sample(phrases)
     currentPhraseId = onePhrase.id
     const content = onePhrase.content
-    phraseArray = content.toUpperCase().split('')
+    const cleanContent = content.normalize('NFD').replace(/[^a-zA-Z ]/g, "")
+    phraseArray = cleanContent.toUpperCase().split('')
     console.log(phraseArray)
     phraseArray.forEach (clue => createClueLi(clue))
 }
