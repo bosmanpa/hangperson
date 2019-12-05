@@ -7,11 +7,9 @@
 }
 
 img {
-
     height: 600px;
     position: relative;
     left:430px;
-    
 }
 
 #winner {
@@ -64,10 +62,33 @@ img {
     position: relative;
     bottom:450px;
 }
+#title {
+    font-family: 'Chalkduster', 'fantasy';
+    font-size: 50px;
+    margin: 10px;
+    margin-bottom: 20px;
+}
+#new-game-btn{
+    border-color: rgba(35, 141, 41, 0.966);
+    padding: 7px;
+    border-radius:5px;
+    color:rgba(35, 141, 41, 0.966);
+}
+#delete-button{
+    border-color: rgba(35, 141, 41, 0.966);
+    padding: 7px;
+    border-radius:5px;
+    color:rgba(35, 141, 41, 0.966);
+}
+#reset-button{
+    border-color: rgba(35, 141, 41, 0.966);
+    padding: 7px;
+    border-radius:5px;
+    color:rgba(35, 141, 41, 0.966);
+}
 
 button:disabled,
 button[disabled]{
-  /* border: 1px solid #999999; */
   background-color: black;
   color: black;
 }
