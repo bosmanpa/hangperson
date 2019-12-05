@@ -207,7 +207,7 @@ function addButtonListener() {
             } else {
                 loseCounter --
                 let picture = document.querySelector('img')
-                picture.src = `pics/${loseCounter}.jpg`
+                picture.src = `pics/${loseCounter}.png`
                 if (loseCounter === 0) {
                     const loseMsg = document.getElementById('loser')
                     loseMsg.style.display = 'inline'
@@ -264,7 +264,8 @@ function checkClue(clue) {
 function renderPicture() {
     const picDiv = document.querySelector('.hangman')
     let picture = document.createElement('img')
-    picture.src = `pics/${loseCounter}.jpg`
+    picture.src = `pics/${loseCounter}.png`
+    picture.className = "border border-secondary"
     picDiv.appendChild(picture)
 }
 
