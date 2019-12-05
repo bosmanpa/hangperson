@@ -27,7 +27,7 @@ end
     )
 end
 
-20.times do 
+10.times do 
     Phrase.create(
         content: Faker::Movies::LordOfTheRings.unique.character,
         category: 'Lord of The Rings Character'
@@ -63,17 +63,24 @@ end
     )
 end
 
-20.times do
+10.times do
     Phrase.create(
         content: Faker::Games::Pokemon.unique.name,
         category: 'Pokemon'
     )
 end
 
-20.times do
+10.times do
     Phrase.create(
         content: Faker::Superhero.unique.name,
         category: 'Superhero'
     )
 end
-    
+
+sunny_array = ['Charlie Kelly', 'Ronald Mac McDonald', 'Dennis Reynolds', 'Dee Reynolds', 'Frank Reynolds', 'Artemis Dubois', 'Da Maniac', 'Uncle Jack Kelly','Rickety Cricket', 'Liam McPoyle', 'Ryan McPoyle', 'Margaret McPoyle', 'Doyle McPoyle', 'Gail the Snail', 'Bill Ponderosa', 'Maureen Ponderosa', 'The Waitress', 'Ben the Soldier', 'Fatty Magoo', 'Bonnie Kelly', 'Luther McDonald', 'Pop Pop', 'Special Agent Jack Bauer', 'Country Mac']
+sunny_array.each do |character|
+    Phrase.create(
+        content: character,
+        category: 'Always Sunny Character'
+    )
+end

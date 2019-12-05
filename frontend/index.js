@@ -291,6 +291,13 @@ function renderPhrases(phrases) {
     phraseArray = cleanContent.toUpperCase().split('')
     console.log(phraseArray)
     phraseArray.forEach (clue => createClueLi(clue))
+    renderCategory(onePhrase)
+}
+
+function renderCategory(onePhrase) {
+    const clueContainer = document.getElementById('phrase')
+    const categoryHtml = `<h4>Hint: ${onePhrase.category}</h4>`
+    clueContainer.insertAdjacentHTML('beforeend', categoryHtml)
 }
 
 function createClueLi(clue) {
