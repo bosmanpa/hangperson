@@ -1,7 +1,17 @@
 #phrase li {
     display: inline;
     padding: 2px;
-    font-size: 50px;
+    font-size: 40px;
+    position: relative;
+    bottom: 30px;
+}
+
+img {
+
+    height: 600px;
+    position: relative;
+    left:430px;
+    
 }
 
 #winner {
@@ -21,7 +31,36 @@
 #game {
     display: none;
 }
+#player-stats {
+    float: left;
+    position: relative ;
+    left: 150px;
+    top:30px;
+    
+}
 
 #player-form {
     display: none;
+}
+
+
+.alphabet {
+    position: relative;
+    bottom: 450px;
+    margin: 30px;
+}
+.winner {
+    position: relative;
+    left:50px;
+    bottom: 450px;
+    margin: 20px;
+}
+#new-game-btn{
+    position: relative;
+    bottom:450px;
+}
+
+#phrase-category {
+    position: relative;
+    bottom:450px;
 }

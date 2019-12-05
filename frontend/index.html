@@ -1,39 +1,41 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="theme.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="theme.css">
 
-    <title>Hangperson Game</title>
-  </head>
-  <body>
-      <h1 class="mx-auto" style="width: 300px;">Hangperson</h1>
+        <title>Hangperson Game</title>
+    </head>
+    <body>
+        <h1 class="mx-auto" style="width: 300px;">Hangperson</h1>
 
-    <div class="dropdown mx-auto" style="width: 300px;">
-        <button class="btn btn-secondary dropdown-toggle mx-auto" style="width: 200px;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Playaz
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown mx-auto" style="width: 300px;">
+            <button class="btn btn-secondary dropdown-toggle mx-auto" style="width: 200px;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Playaz
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            </div>
         </div>
-    </div>
 
-    <!--make div for form insertion-->
+        <!--make div for form insertion-->
     
-    <form id="player-form" class="mx-auto" style="width: 300px;">
-        <input type="text" id="player-name">
-        <input type="submit" value="Create Player">
-    </form>   
+        <form id="player-form" class="mx-auto" style="width: 300px;">
+            <input type="text" id="player-name">
+            <input type="submit" value="Create Player">
+        </form>   
 
-      <div id="game">
+        <div id="game">
 
-          
-          <div class="mx-auto hangman reset-my-body" style="width: 300px">
-          </div>
+            <div id="player-stats">
+            </div>
+            
+            <div class="mx-auto hangman reset-my-body" style="width: 300px">
+            </div>
             
             <div id="phrase-category" class="mx-auto" style="width: 600px">
                 <ul id='phrase' class='reset-my-body'></ul>
@@ -42,7 +44,7 @@
             <div class="alphabet reset-my-body mx-auto" style='width: 500px'>
             </div>
                 
-            <div class="results mx-auto" style="width: 400px">
+            <div class="results mx-auto winner" style="width: 400px">
                     <h2 id='winner' class='hide-my-body'>YOU WIN!</h2>
                     <h2 id='loser' class='hide-my-body'>YOU LOSE!</h2>
             </div>
@@ -51,8 +53,6 @@
                     <button id="new-game-btn" class="hide-my-body">New Game</button>
             </div>
 
-            <div id="player-stats">
-            </div>
 
         </div>
         
