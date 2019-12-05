@@ -24,21 +24,38 @@ function fetchPlayers() {
 
 function addDropdowns(players) {
     players.forEach (player => addDropdown(player))
+    addNewPlayer(players)
+}
+
+function addNewPlayer(players) {
     const selection = `<a id='new-player' class="dropdown-item" href="#">New Player</a>`
     const dropdown = document.querySelector('.dropdown-menu')
     dropdown.insertAdjacentHTML('beforeend', selection)
-    dropdown.addEventListener('click', function(event) {
-        if (event.target.innerText === 'New Player') {
-            // create new player
-            const form = document.getElementById('player-form')
-            form.style.display = 'block'
-        } else if (event.target.className === 'dropdown-item') {
-            const chosenPlayer = players.find(player => `player-${player.id}` === event.target.id)
-            currentPlayerId = chosenPlayer.id
-            currentPlayerName = chosenPlayer.name
-            fetchGames(currentPlayerId)
-        }
-    })
+    dropdown.addEventListener('click', event => chooseOrCreatePlayer(event, players))
+        // if (event.target.innerText === 'New Player') {
+        //     // create new player
+        //     const form = document.getElementById('player-form')
+        //     form.style.display = 'block'
+        // } else if (event.target.className === 'dropdown-item') {
+        //     const chosenPlayer = players.find(player => `player-${player.id}` === event.target.id)
+        //     currentPlayerId = chosenPlayer.id
+        //     currentPlayerName = chosenPlayer.name
+        //     fetchGames(currentPlayerId)
+        // }
+    // })
+}
+
+function chooseOrCreatePlayer(event, players) {
+    if (event.target.innerText === 'New Player') {
+        // create new player
+        const form = document.getElementById('player-form')
+        form.style.display = 'block'
+    } else if (event.target.className === 'dropdown-item') {
+        const chosenPlayer = players.find(player => `player-${player.id}` === event.target.id)
+        currentPlayerId = chosenPlayer.id
+        currentPlayerName = chosenPlayer.name
+        fetchGames(currentPlayerId)
+    }
 }
 
 function fetchGames(playerId) {
@@ -120,7 +137,6 @@ function renderGame() {
     renderStats(currentPlayerName, gameWins, gameLosses)
     const playerDropdown = document.querySelector('.dropdown')
     playerDropdown.style.display = 'none'
-    const phraseContainer = document.getElementById('phrase')
     fetch('http://localhost:3000/phrases')
     .then(resp => resp.json())
     .then(phrases => renderPhrases(phrases))
@@ -162,7 +178,6 @@ function showGame() {
 }
 
 function gameReload() {
-    const phraseContainer = document.getElementById('phrase')
     fetch('http://localhost:3000/phrases')
     .then(resp => resp.json())
     .then(phrases => renderPhrases(phrases))
