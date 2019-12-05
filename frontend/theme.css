@@ -154,6 +154,13 @@ img {
     color:rgba(35, 141, 41, 0.966);
 }
 
+#change-player{
+    border-color: rgba(35, 141, 41, 0.966);
+    padding: 7px;
+    border-radius:5px;
+    color:rgba(35, 141, 41, 0.966);
+}
+
 button:disabled,
 button[disabled]{
   background-color: black;

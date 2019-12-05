@@ -63,10 +63,18 @@ function renderStats(playerName, winNumber, lossNumber) {
     <button id="delete-button">Delete Player</button>
     <br><br>
     <button id="reset-button">Reset Games</button>
+    <br><br>
+    <button id="change-player">Change Playa</button>
     `
     statsDiv.innerHTML = winLossHtml
     deleteButton()
     resetButton()
+    changePlayer()
+}
+
+function changePlayer() {
+    const changeBtn = document.getElementById('change-player')
+    changeBtn.addEventListener('click', () => window.location.reload())
 }
 
 function formListener() {
@@ -163,6 +171,7 @@ function gameReload() {
     renderPicture()
     deleteButton()
     resetButton()
+    // changePlayer()
 }
 
 function newGame() {
