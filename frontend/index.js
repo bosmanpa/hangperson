@@ -32,22 +32,10 @@ function addNewPlayer(players) {
     const dropdown = document.querySelector('.dropdown-menu')
     dropdown.insertAdjacentHTML('beforeend', selection)
     dropdown.addEventListener('click', event => chooseOrCreatePlayer(event, players))
-        // if (event.target.innerText === 'New Player') {
-        //     // create new player
-        //     const form = document.getElementById('player-form')
-        //     form.style.display = 'block'
-        // } else if (event.target.className === 'dropdown-item') {
-        //     const chosenPlayer = players.find(player => `player-${player.id}` === event.target.id)
-        //     currentPlayerId = chosenPlayer.id
-        //     currentPlayerName = chosenPlayer.name
-        //     fetchGames(currentPlayerId)
-        // }
-    // })
 }
 
 function chooseOrCreatePlayer(event, players) {
     if (event.target.innerText === 'New Player') {
-        // create new player
         const form = document.getElementById('player-form')
         form.style.display = 'block'
     } else if (event.target.className === 'dropdown-item') {
