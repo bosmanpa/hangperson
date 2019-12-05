@@ -24,21 +24,38 @@ function fetchPlayers() {
 
 function addDropdowns(players) {
     players.forEach (player => addDropdown(player))
+    addNewPlayer(players)
+}
+
+function addNewPlayer(players) {
     const selection = `<a id='new-player' class="dropdown-item" href="#">New Player</a>`
     const dropdown = document.querySelector('.dropdown-menu')
     dropdown.insertAdjacentHTML('beforeend', selection)
-    dropdown.addEventListener('click', function(event) {
-        if (event.target.innerText === 'New Player') {
-            // create new player
-            const form = document.getElementById('player-form')
-            form.style.display = 'block'
-        } else if (event.target.className === 'dropdown-item') {
-            const chosenPlayer = players.find(player => `player-${player.id}` === event.target.id)
-            currentPlayerId = chosenPlayer.id
-            currentPlayerName = chosenPlayer.name
-            fetchGames(currentPlayerId)
-        }
-    })
+    dropdown.addEventListener('click', event => chooseOrCreatePlayer(event, players))
+        // if (event.target.innerText === 'New Player') {
+        //     // create new player
+        //     const form = document.getElementById('player-form')
+        //     form.style.display = 'block'
+        // } else if (event.target.className === 'dropdown-item') {
+        //     const chosenPlayer = players.find(player => `player-${player.id}` === event.target.id)
+        //     currentPlayerId = chosenPlayer.id
+        //     currentPlayerName = chosenPlayer.name
+        //     fetchGames(currentPlayerId)
+        // }
+    // })
+}
+
+function chooseOrCreatePlayer(event, players) {
+    if (event.target.innerText === 'New Player') {
+        // create new player
+        const form = document.getElementById('player-form')
+        form.style.display = 'block'
+    } else if (event.target.className === 'dropdown-item') {
+        const chosenPlayer = players.find(player => `player-${player.id}` === event.target.id)
+        currentPlayerId = chosenPlayer.id
+        currentPlayerName = chosenPlayer.name
+        fetchGames(currentPlayerId)
+    }
 }
 
 function fetchGames(playerId) {
@@ -63,10 +80,18 @@ function renderStats(playerName, winNumber, lossNumber) {
     <button id="delete-button">Delete Player</button>
     <br><br>
     <button id="reset-button">Reset Games</button>
+    <br><br>
+    <button id="change-player">Change Playa</button>
     `
     statsDiv.innerHTML = winLossHtml
     deleteButton()
     resetButton()
+    changePlayer()
+}
+
+function changePlayer() {
+    const changeBtn = document.getElementById('change-player')
+    changeBtn.addEventListener('click', () => window.location.reload())
 }
 
 function formListener() {
@@ -108,11 +133,9 @@ function addDropdown(player) {
 }
 
 function renderGame() {
-    // welcome player
     renderStats(currentPlayerName, gameWins, gameLosses)
     const playerDropdown = document.querySelector('.dropdown')
     playerDropdown.style.display = 'none'
-    const phraseContainer = document.getElementById('phrase')
     fetch('http://localhost:3000/phrases')
     .then(resp => resp.json())
     .then(phrases => renderPhrases(phrases))
@@ -124,7 +147,10 @@ function renderGame() {
 
 function resetButton() {
     const resetBtn = document.getElementById('reset-button')
-    resetBtn.addEventListener('click', resetGames)
+    resetBtn.addEventListener('click', function(){
+        const result = confirm("Are you sure you want to reset your stats?")
+        if (result == true) {resetGames()}
+    })
 }
 
 function resetGames() {
@@ -134,13 +160,15 @@ function resetGames() {
         gameWins = 0
         gameLosses = 0
         renderStats(currentPlayerName, gameWins, gameLosses)
-        deleteButton()
     })
 }
 
 function deleteButton() {
     const deleteBtn = document.getElementById('delete-button')
-    deleteBtn.addEventListener('click', deletePlayer)
+    deleteBtn.addEventListener('click', function(){
+        const result = confirm("Are you sure you want to delete this player?")
+        if (result == true) {deletePlayer()}
+    })
 }
 
 function deletePlayer() {
@@ -155,14 +183,11 @@ function showGame() {
 }
 
 function gameReload() {
-    const phraseContainer = document.getElementById('phrase')
     fetch('http://localhost:3000/phrases')
     .then(resp => resp.json())
     .then(phrases => renderPhrases(phrases))
     renderAlphabet()
     renderPicture()
-    deleteButton()
-    resetButton()
 }
 
 function newGame() {
