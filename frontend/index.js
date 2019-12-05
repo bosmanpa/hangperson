@@ -72,6 +72,10 @@ function renderStats(playerName, winNumber, lossNumber) {
     <button id="change-player">Change Playa</button>
     `
     statsDiv.innerHTML = winLossHtml
+    callButtons()
+}
+
+function callButtons() {
     deleteButton()
     resetButton()
     changePlayer()
@@ -84,11 +88,13 @@ function changePlayer() {
 
 function formListener() {
     const form = document.getElementById('player-form')
-    form.addEventListener('submit', function(event) {
-        event.preventDefault()
-        createPlayer(event.target.children[0].value)
-        form.style.display = 'none'
-    })
+    form.addEventListener('submit', event => formSubmit(event, form))
+}
+
+function formSubmit(event, form) {
+    event.preventDefault()
+    createPlayer(event.target.children[0].value)
+    form.style.display = 'none'
 }
 
 function createPlayer(name) {
