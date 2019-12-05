@@ -142,7 +142,6 @@ function resetGames() {
         gameWins = 0
         gameLosses = 0
         renderStats(currentPlayerName, gameWins, gameLosses)
-        deleteButton()
     })
 }
 
@@ -169,9 +168,6 @@ function gameReload() {
     .then(phrases => renderPhrases(phrases))
     renderAlphabet()
     renderPicture()
-    deleteButton()
-    resetButton()
-    // changePlayer()
 }
 
 function newGame() {
