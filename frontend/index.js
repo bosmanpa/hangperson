@@ -7,6 +7,7 @@ let currentPhraseId
 let gameWins
 let gameLosses
 let playerGames
+const clueContainer = document.getElementById('phrase')
 
 document.addEventListener('DOMContentLoaded', main)
 
@@ -67,7 +68,7 @@ function renderStats(playerName, winNumber, lossNumber) {
     <h4>Losses: ${lossNumber}</h4>
     <button id="delete-button">Delete Player</button>
     <br><br>
-    <button id="reset-button">Reset Games</button>
+    <button id="reset-button">Reset Stats</button>
     <br><br>
     <button id="change-player">Change Playa</button>
     `
@@ -133,6 +134,10 @@ function renderGame() {
     fetch('http://localhost:3000/phrases')
     .then(resp => resp.json())
     .then(phrases => renderPhrases(phrases))
+    gamePlay()
+}
+
+function gamePlay() {
     renderAlphabet()
     renderPicture()
     addButtonListener()
@@ -168,7 +173,7 @@ function deleteButton() {
 function deletePlayer() {
     fetch(`http://localhost:3000/players/${currentPlayerId}`, { method: 'DELETE'})
     .then(resp => resp.json())
-    .then(window.location.reload())
+    .then(() => window.location.reload())
 }
 
 function showGame() {
@@ -185,14 +190,18 @@ function gameReload() {
 }
 
 function newGame() {
-    const myBody = document.querySelectorAll('.reset-my-body')
-    myBody.forEach(node => node.innerText = '')
-    const hideMe = document.querySelectorAll('.hide-my-body')
-    hideMe.forEach(node => node.style.display = 'none')
+    hideOldGame()
     winCounter = 0
     loseCounter = 6
     phraseArray = [] 
     gameReload()
+}
+
+function hideOldGame() {
+    const myBody = document.querySelectorAll('.reset-my-body')
+    myBody.forEach(node => node.innerText = '')
+    const hideMe = document.querySelectorAll('.hide-my-body')
+    hideMe.forEach(node => node.style.display = 'none')
 }
 
 function disableLetters() {
@@ -205,52 +214,73 @@ function disableLetters() {
 
 function addButtonListener() {
     const buttonDiv = document.querySelector('.alphabet')
-    buttonDiv.addEventListener('click', function(event) {
-        let filteredArray = phraseArray.filter(letter => letter != ' ')
-        if (event.target.className === 'btn btn-outline-success') {
-            event.target.style.background = 'black'
-            const liNodeList = document.querySelectorAll(`li[data-id=${event.target.innerText}]`)
-            const liArray = Array.from(liNodeList)
-            if (liArray.length > 0) {
-                liArray.forEach(li => li.innerText = li.dataset.id)
-                winCounter += liArray.length
-                // Win Situation
-                if (winCounter === filteredArray.length) {
-                    const winMsg = document.getElementById('winner')
-                    winMsg.style.display = 'inline'
-                    const newBtn = document.getElementById('new-game-btn')
-                    newBtn.style.display = 'inline'
-                    gameWins ++
-                    renderStats(currentPlayerName, gameWins, gameLosses)
-                    newBtn.addEventListener('click', newGame)
-                    disableLetters()
-                    celebration()
-                    saveGame(true)
-                }
-                // Lose Situation
-            } else {
-                loseCounter --
-                let picture = document.querySelector('img')
-                picture.src = `pics/${loseCounter}.png`
-                if (loseCounter === 0) {
-                    const loseMsg = document.getElementById('loser')
-                    loseMsg.style.display = 'inline'
-                    const newBtn = document.getElementById('new-game-btn')
-                    newBtn.style.display = 'inline'
-                    gameLosses ++
-                    renderStats(currentPlayerName, gameWins, gameLosses)
-                    newBtn.addEventListener('click', newGame)
-                    disableLetters()
-                    const clueContainer = document.getElementById('phrase')
-                    const clueArray = Array.from(clueContainer.children)
-                    clueArray.forEach (clue => checkClue(clue))
-                    saveGame(false)
-                } 
-            }
-            event.target.disabled = true
-        }
+    buttonDiv.addEventListener('click', event => letterSelection(event))
+}
 
-    })
+function letterSelection(event) {
+    if (event.target.className === 'btn btn-outline-success') {
+        event.target.style.background = 'black'
+        const liNodeList = document.querySelectorAll(`li[data-id=${event.target.innerText}]`)
+        const liArray = Array.from(liNodeList)
+        if (liArray.length > 0) {
+            correctLetter(liArray)
+        } else {
+            wrongLetter()
+        }
+    event.target.disabled = true
+    }
+}
+
+function wrongLetter() {
+    loseCounter --
+    let picture = document.querySelector('img')
+    picture.src = `pics/${loseCounter}.png`
+    if (loseCounter === 0) {
+        loseCondition()
+    } 
+}
+
+function correctLetter(liArray) {
+    let filteredArray = phraseArray.filter(letter => letter != ' ')
+    liArray.forEach(li => li.innerText = li.dataset.id)
+    winCounter += liArray.length
+    if (winCounter === filteredArray.length) {
+        winCondition()
+    }
+}
+
+function loseCondition() {
+    const loseMsg = document.getElementById('loser')
+    loseMsg.style.display = 'inline'
+    gameLosses ++
+    finishAndSave(false)
+    missedLetters()
+}
+
+function missedLetters() {
+    const clueArray = Array.from(clueContainer.children)
+    clueArray.forEach (clue => checkClue(clue))
+}
+
+function winCondition() {
+    const winMsg = document.getElementById('winner')
+    winMsg.style.display = 'inline'
+    gameWins ++
+    finishAndSave(true)
+    celebration()
+}
+
+function finishAndSave(trueFalse) {
+    revealNewButton()
+    renderStats(currentPlayerName, gameWins, gameLosses)
+    disableLetters()
+    saveGame(trueFalse)
+}
+
+function revealNewButton() {
+    const newBtn = document.getElementById('new-game-btn')
+    newBtn.style.display = 'inline'
+    newBtn.addEventListener('click', newGame)
 }
 
 function saveGame(winOrLose) {
@@ -272,7 +302,6 @@ function saveGame(winOrLose) {
     fetch('http://localhost:3000/games', postObj)
     .then(resp => resp.json())
     .then(game => console.log(game))
-    // render wins and losses for player
     .catch(error => console.log(error))
     
 }
@@ -311,28 +340,20 @@ function makeButton(letter) {
 function renderPhrases(phrases) {
     const onePhrase = sample(phrases)
     currentPhraseId = onePhrase.id
-    const content = onePhrase.content
-    const cleanContent = content.normalize('NFD').replace(/[^a-zA-Z ]/g, "")
-    phraseArray = cleanContent.toUpperCase().split('')
+    phraseArray = onePhrase.content.normalize('NFD').replace(/[^a-zA-Z ]/g, "").toUpperCase().split('')
     console.log(phraseArray)
     phraseArray.forEach (clue => createClueLi(clue))
     renderCategory(onePhrase)
 }
 
 function renderCategory(onePhrase) {
-    const clueContainer = document.getElementById('phrase')
     const categoryHtml = `<h4>Hint: ${onePhrase.category}</h4>`
     clueContainer.insertAdjacentHTML('beforeend', categoryHtml)
 }
 
 function createClueLi(clue) {
-    const clueContainer = document.getElementById('phrase')
     const li = document.createElement('li')
-    if (clue === ' ') {
-        li.innerText = clue
-    } else {
-        li.innerText = '_'
-    }
+    clue === ' ' ? li.innerText = clue : li.innerText = '_'
     li.dataset.id = clue
     li.className = 'clue'
     clueContainer.appendChild(li)
@@ -341,6 +362,7 @@ function createClueLi(clue) {
 function sample(array) {
     return array[Math.floor ( Math.random() * array.length )]
 }
+
 // fireworks
 const brd = document.createElement("DIV");
 document.body.insertBefore(brd, document.getElementById("game"));
